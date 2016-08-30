@@ -1,0 +1,25 @@
+<!docttype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>张凌云的博客</title>
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <div class="jumbotron">
+                        <center><h1>张凌云个人博客</h1></center>
+                        <p>...</p>
+                        <p><a class="btn btn-primary btn-lg" href="#" role="button">更多信息</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>

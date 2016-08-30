@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li><a href="/article/list/{{b.id}}">{{b.name}}</a></li>
+    <li class="active">文章发表页</li>
+</ol>
+<br />
+<br />
+<div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">标题</span>
+    <input type="text" class="form-control" placeholder="标题" aria-describedby="basic-addon1">
+</div>
+
+<br />
+<textarea class="form-control" rows="6" placeholder="内容" ></textarea>
+<br />
+<a href="#" class="btn btn-primary">提交</a>
+{% endblock %}
