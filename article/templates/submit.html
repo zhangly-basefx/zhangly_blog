@@ -7,13 +7,22 @@
 </ol>
 <br />
 <br />
-<div class="input-group">
-    <span class="input-group-addon" id="basic-addon1">标题</span>
-    <input type="text" class="form-control" placeholder="标题" aria-describedby="basic-addon1">
-</div>
+<form action="/article/create/{{b.id}}" method="POST">{% csrf_token %}
+    <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">标题</span>
+        <input name="title" type="text" class="form-control" placeholder="标题" aria-describedby="basic-addon1" value="{{form.title.value}}">
+    </div>
 
-<br />
-<textarea class="form-control" rows="6" placeholder="内容" ></textarea>
-<br />
-<a href="#" class="btn btn-primary">提交</a>
+    <br />
+    <textarea name="content" class="form-control" rows="6" placeholder="内容" >{{ form.content.value }}</textarea>
+    <br />
+    {% for field in form %}
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">{{ field.label }}:{{ error }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+    <button  class="btn btn-primary">提交</button>
+</form>
 {% endblock %}

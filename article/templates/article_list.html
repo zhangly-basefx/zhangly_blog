@@ -12,7 +12,6 @@
         <tr>
             <th>状态</th>
             <th>标题</th>
-            <th>作者</th>
             <th>创建时间</th>
             <th>最后更新时间</th>
         </tr>
@@ -21,8 +20,7 @@
         {% for article in articles %}
         <tr>
             <td>{{ article.status }}</td>
-            <td>{{ article.title }}</td>
-            <td>{{ article.content }}</td>
+            <td><a href="/article/detail/{{article.id}}">{{ article.title }}</a></td>
             <td>{{ article.create_timestamp|date:"Y-m-d P"}}</td>
             <td>{{ article.last_update_timestamp|date:"Y-m-d P"}}</td>
         </tr>
