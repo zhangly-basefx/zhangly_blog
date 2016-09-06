@@ -27,6 +27,30 @@
         {% endfor %}
     </tbody>
 </table>
-
+<nav>
+    <ul class="pagination">
+    {% if page.has_previous %}
+        <li>
+            <a href="?page_no={{ page.previous_page_number }}">&laquo;</a>
+        </li>
+    {% endif %}
+    {% for link in plinks %}
+        {% if link == page_no %}
+            <li class="active">
+                <a href="?page_no={{ link }}">{{ link }}</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="?page_no={{ link }}">{{ link }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+    {% if page.has_next %}
+        <li>
+            <a href="?page_no={{page.next_page_number }}">&raquo;</a>
+        </li>
+    {% endif %}
+    </ul>
+</nav>
 
 {% endblock %}
