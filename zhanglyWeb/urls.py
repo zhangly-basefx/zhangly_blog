@@ -17,12 +17,13 @@ from django.conf.urls import url,include
 from django.contrib import admin
 
 import views
-
+import activate.views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^article/',include('article.urls')),
     url(r'^$',views.index),
     url(r'^register',views.create_user),
     url(r'^re_succeed',views.re_succeed),
+    url(r'^activate/(?P<code>[\w-]+)$',activate.views.activate),
 ]
 
