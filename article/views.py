@@ -4,7 +4,6 @@ from block.models import Block
 from article.models import Article
 from article.forms import ArticleForm
 from django.core.paginator import Paginator
-
 def article_list(request,block_id):
     block_id = int(block_id)
     block = Block.objects.get(id=block_id)
@@ -41,3 +40,5 @@ def article_detail(request,article_id):
     article = Article.objects.get(id=article_id)
     block = Block.objects.get(name=article.block)
     return render(request,"article_detail.html",{"a":article,"b":block})
+
+    

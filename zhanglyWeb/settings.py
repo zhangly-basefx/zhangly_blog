@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'block',
     'article',
+    'activate',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +125,16 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS=(
     os.path.join(BASE_DIR,"static"),
 )
+
+
+EMAIL_USE_SSL = True
+EMAIL_HOST = "smtp.qq.com"
+EMAIL_POST = 465
+EMAIL_HOST_USER = "793417544@qq.com"
+EMAIL_HOST_PASSWORD="ntqkxoaueylebebc"
+DEFAULT_FROM_EMAIL="793417544@qq.com"
+
+
+
+
+

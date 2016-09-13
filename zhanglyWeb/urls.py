@@ -22,5 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^article/',include('article.urls')),
     url(r'^$',views.index),
+    url(r'^register',views.create_user),
+    url(r'^re_succeed',views.re_succeed),
 ]
 
