@@ -36,9 +36,8 @@ def create_user(request,):
         user = User.objects.create_user(username,email,password)
         user.is_active = False
         user.save()
-        user2 = User.objects.get(username=username)
         activate_code = str(uuid.uuid4())
-        activate = Activate(user2,activate_code)
+        activate = Activate(user,activate_code)
         activate.save()
         return redirect("/re_succeed")
 
