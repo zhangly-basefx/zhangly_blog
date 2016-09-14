@@ -126,7 +126,7 @@ STATICFILES_DIRS=(
     os.path.join(BASE_DIR,"static"),
 )
 
-
+#set email
 EMAIL_USE_SSL = True
 EMAIL_HOST = "smtp.qq.com"
 EMAIL_PORT = 465
@@ -136,6 +136,8 @@ EMAIL_HOST_PASSWORD="binemcckuemfbbjd"
 DEFAULT_FROM_EMAIL="793417544@qq.com"
 
 
+#set login
+LOGIN_REDIRECT_URL = "/"
 
 
 

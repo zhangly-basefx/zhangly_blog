@@ -25,5 +25,7 @@ urlpatterns = [
     url(r'^register',views.create_user),
     url(r'^re_succeed',views.re_succeed),
     url(r'^activate/(?P<code>[\w-]+)$',activate.views.activate),
+    url(r'^accounts/',include('django.contrib.auth.urls')),
+
 ]
 

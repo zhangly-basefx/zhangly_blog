@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <meta charset="utf-8"/>
+    <title>登录页面</title>
+    <link rel='stylesheet' href="/static/css/bootstrap.min.css"/>
+</head>
+<ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">登录界面</li>
+</ol>
+<br />
+{% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endfor %}
+{% endif %}
+{% if form.username.errors %}
+    {% for error in form.username.errors %}
+    <div class="alert alert-danger">用户名:{{ error }}</div>
+    {% endfor %}
+{% endif %}
+{% if form.password.errors %}
+    {% for error in form.password.errors %}
+    <div class="alert alert-danger">密码:{{ error }}</div>
+    {% endfor %}
+{% endif %}
+<div class="panel panel-info">
+    <div class="panel-heading">登录</div>
+    <form method="POST">{% csrf_token %}
+        <div class="input-group" style="margin:20px">
+            <span class="input-group-addon">用户名</span>
+            <input name="username" type="text" class="form-control" value="{{ username }}">
+        </div>
+        <div class="input-group" style="margin:20px">
+            <span class="input-group-addon">密码</span>
+            <input name="password" type="password" class="form-control" value="{{ password }}">
+        </div>
+        <input type="hidden" name="next" value="{{ next }}"/>
+        <button class="btn btn-primary" style="margin-left:20px">登录</button>
+    </form>
+    <div class="well">
+        <p><a href="/register">还没有用户？点击注册.</a>或者<a href="/accounts/password_reset">忘记密码.</a></p>
+    </div>
+</div>
+{% endblock %}
