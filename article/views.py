@@ -6,20 +6,34 @@ from article.forms import ArticleForm
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 
+def paginate_queryset(objs,page_no,cut_per_page=10,half_show_length=5):
+    p = Paginator(objs,cut_per_page)
+    if page_no > p.num_pages:
+        page_no = p.num_pages
+    if page_no <= 0:
+        page_no = 1
+    page_links = [i for i in range(page_no - half_show_length,page_no+half_show_length+1) if i >0 and i <= p.num_pages]
+    page = p.page(page_no)
+    previous_link = page_links[0] - 1
+    next_link = page_links[-1] + 1
+    pagination_data = {"has_previous":previous_link > 0,
+                       "has_next":next_link <= p.num_pages,
+                       "previous_link":previous_link,
+                       "next_link":next_link,
+                       "page_cnt":p.num_pages,
+                       "current_no":page_no,
+                       "page_links":page_links}
+    return (page.object_list,pagination_data)
+
 
 def article_list(request,block_id):
     block_id = int(block_id)
     block = Block.objects.get(id=block_id)
     #articles_objs=Article.objects.filter(block=block,status=0).order_by("-id")
-    ARTICLE_CNT_1PAGE = 3
     page_no = int(request.GET.get("page_no","1"))
     all_articles = Article.objects.filter(block=block,status=0).order_by("-id")
-    p = Paginator(all_articles,ARTICLE_CNT_1PAGE)
-    page = p.page(page_no)
-    page_links = [i for i in range(page_no - 5,page_no+6) if i >0 and i <= p.num_pages]
-    articles_objs = page.object_list
-   
-    return render(request,"article_list.html",{"articles":articles_objs,"b":block,"page":page,"plinks":page_links,"page_no":page_no})
+    page_articles,pagination_data = paginate_queryset(all_articles,page_no)
+    return render(request,"article_list.html",{"articles":page_articles,"b":block,"pagination_data":pagination_data,})
 
 
 @login_required
