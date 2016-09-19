@@ -6,7 +6,7 @@ from article.forms import ArticleForm
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 
-def paginate_queryset(objs,page_no,cut_per_page=10,half_show_length=5):
+def paginate_queryset(objs,page_no,cut_per_page=6,half_show_length=5):
     p = Paginator(objs,cut_per_page)
     if page_no > p.num_pages:
         page_no = p.num_pages
@@ -33,7 +33,7 @@ def article_list(request,block_id):
     page_no = int(request.GET.get("page_no","1"))
     all_articles = Article.objects.filter(block=block,status=0).order_by("-id")
     page_articles,pagination_data = paginate_queryset(all_articles,page_no)
-    return render(request,"article_list.html",{"articles":page_articles,"b":block,"pagination_data":pagination_data,})
+    return render(request,"article_list.html",{"articles":page_articles,"b":block,"pagination_data":pagination_data})
 
 
 @login_required
@@ -60,5 +60,3 @@ def article_detail(request,article_id):
     article = Article.objects.get(id=article_id)
     block = Block.objects.get(name=article.block)
     return render(request,"article_detail.html",{"a":article,"b":block})
-
-    
