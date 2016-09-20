@@ -5,6 +5,7 @@ from article.models import Article
 from article.forms import ArticleForm
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from comment.models import Comment
 
 def paginate_queryset(objs,page_no,cut_per_page=6,half_show_length=5):
     p = Paginator(objs,cut_per_page)
@@ -59,4 +60,14 @@ def article_detail(request,article_id):
     article_id = int(article_id)
     article = Article.objects.get(id=article_id)
     block = Block.objects.get(name=article.block)
-    return render(request,"article_detail.html",{"a":article,"b":block})
+    #comment = Comment.objects.get(article=article)
+    all_comment = Comment.objects.filter(article=article,status=0).order_by("id")
+    page_no = int(request.GET.get("page_no",1))
+    comments,pagination_data = paginate_queryset(all_comment,page_no,cut_per_page=3)
+    return render(request,"article_detail.html",{"a":article,"b":block,
+        "pagination_data":pagination_data,"comments":comments})
+
+
+
+
+

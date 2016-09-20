@@ -18,6 +18,7 @@ from django.contrib import admin
 
 import views
 import activate.views
+import comment.views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^article/',include('article.urls')),
@@ -26,6 +27,7 @@ urlpatterns = [
     url(r'^re_succeed',views.re_succeed),
     url(r'^activate/(?P<code>[\w-]+)$',activate.views.activate),
     url(r'^accounts/',include('django.contrib.auth.urls')),
+    url(r'^comment/create/',comment.views.ifstatus),
 
 ]
 

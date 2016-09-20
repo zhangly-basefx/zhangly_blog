@@ -7,9 +7,84 @@
 </ol>
 <br />
 <br />
-<div class="panel panel-default">
+<div class="panel panel-primary">
     <div class="panel-heading">{{ a.title }}</div>
     <div class="panel-body">{{ a.content|linebreaksbr }}</div>
 </div>
+<br />
+<div class="well well-sm">-----评论区-----</div>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>作者</th>
+            <th>评论内容</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for comment in comments %}
+        <tr>
+            <td width=10%>{{ comment.owner }}</td>
+            <td width=90%>{{ comment.content|linebreaksbr }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br />
+<nav>
+    <ul class="pagination">
+    {% if pagination_data.has_previous %}
+        <li>
+            <a href="?page_no={{ pagination_data.previous_link }}">&laquo;</a>
+        </li>
+    {% endif %}
+    {% for no in pagination_data.page_links %}
+        {% if pagination_data.current_no == no %}
+            <li class="active">
+                <a href="?page_no={{ no }}">{{ no }}</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="?page_no={{ no }}">{{ no }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+    {% if pagination_data.has_next %}
+        <li>
+            <a href="?page_no={{ pagination_data.next_link }}">&raquo;</a>
+        </li>
+    {% endif %}
+    </ul>
+</nav>
+{% if user.is_authenticated %}
+    <textarea id="commentContent" class="form-control" rows="6" placeholder="说些什么..."></textarea>
+    <br />
+    <button id="commentBtn" class="btn btn-primary">发表评论</button>
+{% else %}
+    <br />
+    <p>匿名用户，评论等操作请<a href="/accounts/login">登录</a>.</p>
+{% endif %}
+<script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.csrf.js"></script>
+<script type="text/javascript"> 
+$(document).ready(function(){
+	var article_id = {{ a.id }};
+	var page_cnt = {{ pagination_data.page_cnt }};
+
+	$("#commentBtn").click(function(){
+		var user_comment = $("#commentContent").val();
+		var param = {"article_id":article_id,"content":user_comment};
+		$.post("/comment/create/",param,function(data){
+			var ret = JSON.parse(data);
+			if (ret["status"]=="ok"){
+				$("#commentContent").val("");
+				window.location.href = "/article/detail/{{ a.id }}?page_no=1"
+			}else{
+				alert(ret["msg"]);
+			}
+		});
+	});
+});
+</script>
+
 {% endblock %}
 
