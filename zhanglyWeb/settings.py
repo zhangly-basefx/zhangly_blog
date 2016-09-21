@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'article',
     'activate',
     'comment',
+    'information',
 ]
 
 MIDDLEWARE = [

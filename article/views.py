@@ -57,13 +57,15 @@ def submit(request,block_id):
 
 
 def article_detail(request,article_id):
+    #domain = request.META["HTTP_HOST"]
     article_id = int(article_id)
     article = Article.objects.get(id=article_id)
     block = Block.objects.get(name=article.block)
     #comment = Comment.objects.get(article=article)
     all_comment = Comment.objects.filter(article=article,status=0).order_by("id")
     page_no = int(request.GET.get("page_no",1))
-    comments,pagination_data = paginate_queryset(all_comment,page_no,cut_per_page=3)
+    comments,pagination_data = paginate_queryset(all_comment,page_no,cut_per_page=5)
+    print (pagination_data["page_cnt"])
     return render(request,"article_detail.html",{"a":article,"b":block,
         "pagination_data":pagination_data,"comments":comments})
 

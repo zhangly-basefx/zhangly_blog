@@ -9,51 +9,26 @@
 <br />
 <div class="panel panel-primary">
     <div class="panel-heading">{{ a.title }}</div>
-    <div id="content"  class="panel-body">{{ a.content|linebreaksbr }}</div>
+    <div class="panel-body">{{ a.content|linebreaksbr }}</div>
 </div>
 <br />
-<div id="area" class="well well-lg">用户评论:</div>
-{% for comment in comments %}
-<div class="panel panel-default">
-	<div id="title" class="panel-body">
-		作者:{{ comment.owner }}
-		<a href="#replyRegion" data-id="{{ comment.id}}" class="replyBtn btn btn-default pull-right">回复</a>
-	</div>
-	<br />
-	{% if comment.to_comment %}
-	<div id="comment2" class="panel-footet">
-	<blockquote>
-		<b>回复{{comment.to_comment.owner}}:</b>
-		<br />
-		{{ comment.to_comment.content|linebreaksbr }}
-	<blockquote>
-	</div>
-	{% endif %}
-	<div id="comment1" class="panel-footer">{{ comment.content|linebreaksbr }}</div>
-</div>
-<style type="text/css">
-#area{
-	font-size:25px;
-
-}
-#title{
-	background-color:#FFFFFF;
-	height:10px;
-}
-#comment1{
-	background-color:#F8F8F8;
-	min-height:100px;
-}
-#comment2{
-	background-color:#F8F8F8;
-	min-height:100px
-}
-#content{
-	height:auto;
-	min-height:250px;
-}
-</style>
-{% endfor %}
+<div class="well well-sm">-----评论区-----</div>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>作者</th>
+            <th>评论内容</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for comment in comments %}
+        <tr>
+            <td width=10%>{{ comment.owner }}</td>
+            <td width=90%>{{ comment.content|linebreaksbr }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 <br />
 <nav>
     <ul class="pagination">
@@ -83,9 +58,7 @@
 {% if user.is_authenticated %}
     <textarea id="commentContent" class="form-control" rows="6" placeholder="说些什么..."></textarea>
     <br />
-    <div id="replyRegion">
     <button id="commentBtn" class="btn btn-primary">发表评论</button>
-    </div>
 {% else %}
     <br />
     <p>匿名用户，评论等操作请<a href="/accounts/login">登录</a>.</p>
@@ -96,25 +69,15 @@
 $(document).ready(function(){
 	var article_id = {{ a.id }};
 	var page_cnt = {{ pagination_data.page_cnt }};
-	var to_comment_id =0;
-
-	$(".replyBtn").click(function(e){
-		to_comment_id = parseInt($(e.target).attr("data-id"));
-		$('#commentBtn').focus();
-		$("#commentContent").focus();
-		return false;
-	});
 
 	$("#commentBtn").click(function(){
 		var user_comment = $("#commentContent").val();
-		var page_number = {{ pagination_data.page_cnt }};
-		var info_link = "/article/detail/{{ a.id }}";
-		var param = {"article_id":article_id,"content":user_comment,"to_comment_id":to_comment_id,"info_link":info_link,"page_number":page_number};
+		var param = {"article_id":article_id,"content":user_comment};
 		$.post("/comment/create/",param,function(data){
 			var ret = JSON.parse(data);
 			if (ret["status"]=="ok"){
 				$("#commentContent").val("");
-				window.location.href = "/article/detail/{{ a.id }}?page_no={{ pagination_data.page_cnt }}"
+				window.location.href = "/article/detail/{{ a.id }}?page_no=1"
 			}else{
 				alert(ret["msg"]);
 			}

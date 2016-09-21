@@ -5,10 +5,16 @@ from django.shortcuts import redirect
 import uuid
 from activate.models import Activate
 from django.core.mail import send_mail
+from information.models import Information
 
 def index(request):
     block_infos = Block.objects.filter(status=0).order_by("-id")
-    return render(request,"index.html",{"blocks":block_infos})
+    if request.user.is_authenticated:
+        msg_infos = Information.objects.filter(status=-1,owner=request.user)
+        msg_cnt = len(msg_infos)
+        return render(request,"index.html",{"blocks":block_infos,"msg_cnt":msg_cnt})
+    else:
+        return render(request,"index.html",{"blocks":block_infos})
 
 def create_user(request,):
     if request.method == "GET":
