@@ -14,21 +14,23 @@
 <br />
 <div id="area" class="well well-lg">用户评论:</div>
 {% for comment in comments %}
-<div class="panel panel-primary">
-	<div id="title" class="panel-body">
-		作者:{{ comment.owner }}
-		<a href="#replyRegion" data-id="{{ comment.id}}" class="replyBtn btn btn-default pull-right">回复</a>
+<div class="panel panel-default">
+	<a href="#replyRegion" data-id="{{ comment.id }}" class="replyBtn btn btn-default pull-right">回复</a>
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			作者:{{ comment.owner }}
+		</h3>
 	</div>
-	<br />
-	{% if comment.to_comment %}
-	<div id="comment2" class="panel-footet">
-	<blockquote>
-		<b>回复{{comment.to_comment.owner}}:</b>
-		<br />
-		{{ comment.to_comment.content|linebreaksbr }}
-	<blockquote>
-	{% endif %}
-	<div id="comment1" class="panel-footer">{{ comment.content|linebreaksbr }}</div>
+	<div class="panel-body">
+		{% if comment.to_comment %}
+		<blockquote>
+			<b>回复{{ comment.to_comment.owner }}:</b>
+			<br />
+			{{ comment.to_comment.content|linebreaksbr}}
+		</blockquote>
+		{% endif %}
+		{{ comment.content|linebreaksbr}}
+	</div>
 </div>
 <style type="text/css">
 #area{
@@ -79,48 +81,62 @@
     {% endif %}
     </ul>
 </nav>
-{% if user.is_authenticated %}
-    <textarea id="commentContent" class="form-control" rows="6" placeholder="说些什么..."></textarea>
-    <br />
-    <div id="replyRegion">
-    <button id="commentBtn" class="btn btn-primary">发表评论</button>
-    </div>
-{% else %}
-    <br />
-    <p>匿名用户，评论等操作请<a href="/accounts/login">登录</a>.</p>
-{% endif %}
+<textarea id="commentContent" class="form-control" rows="6" placeholder="说些什么..."></textarea>
+<br />
+<div id="replyRegion">
+<button id="commentBtn" class="btn btn-primary">发表评论</button>
+</div>
+<br />
+<p>匿名用户，评论等操作请<a href="/accounts/login">登录</a>.</p>
 <script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/static/js/jquery.csrf.js"></script>
 <script type="text/javascript"> 
 $(document).ready(function(){
 	var article_id = {{ a.id }};
 	var page_cnt = {{ pagination_data.page_cnt }};
-	var to_comment_id =0;
+	var to_comment_id = 0;
 
 	$(".replyBtn").click(function(e){
-		to_comment_id = parseInt($(e.target).attr("data-id"));
-		$('#commentBtn').focus();
-		$("#commentContent").focus();
-		return false;
+		if ({{ userExist}}=="ok"){
+			to_comment_id = parseInt($(e.target).attr("data-id"));
+			$('#commentBtn').focus();
+			$('#commentContent').focus();
+			return false;
+		}else{
+			alert("请登录再操作！");
+			window.location.href = "/accounts/login";
+		
+		};
+
 	});
 
+
 	$("#commentBtn").click(function(){
-		var user_comment = $("#commentContent").val();
-		var page_number = {{ pagination_data.page_cnt }};
-		var info_link = "/article/detail/{{ a.id }}";
-		var param = {"article_id":article_id,"content":user_comment,"to_comment_id":to_comment_id,"info_link":info_link,"page_number":page_number};
-		$.post("/comment/create/",param,function(data){
-			var ret = JSON.parse(data);
-			if (ret["status"]=="ok"){
-				$("#commentContent").val("");
-				alert(ret["msg"]);
-				window.location.href = "/article/detail/{{ a.id }}?page_no={{ pagination_data.page_cnt }}"
-			}else{
-				alert(ret["msg"]);
-			}
-		});
+		if ({{ userExist }}=="ok"){
+			var user_comment = $("#commentContent").val();
+			var page_number = {{ pagination_data.page_cnt }};
+			var info_link = "/article/detail/{{ a.id }}";
+			var param = {"article_id":article_id,"content":user_comment,"to_comment_id":to_comment_id,"info_link":info_link,"page_number":page_number};
+			$.post("/comment/create/",param,function(data){
+				var ret = JSON.parse(data);
+				if (ret["status"]=="ok"){
+					alert(ret["msg"]);
+					window.location.href = "/article/detail/{{ a.id }}?page_no={{ pagination_data.page_cnt }}";
+				
+				}else{
+					alert(ret["msg"]);
+				};
+			
+			});
+
+		}else{
+			alert("请登录再操作！");
+			window.location.href = "/accounts/login";
+		
+		};
 	});
 });
+
 </script>
 
 {% endblock %}

@@ -17,7 +17,9 @@
 <div class="panel panel-default">
 	<div id="title" class="panel-body">
 		作者:{{ comment.owner }}
-		<a href="#replyRegion" data-id="{{ comment.id}}" class="replyBtn btn btn-default pull-right">回复</a>
+                {% if user.is_authenticated %}
+		    <a href="#replyRegion" data-id="{{ comment.id}}" class="replyBtn btn btn-default pull-right">回复</a>
+		{% endif %}
 	</div>
 	<br />
 	{% if comment.to_comment %}
@@ -26,7 +28,7 @@
 		<b>回复{{comment.to_comment.owner}}:</b>
 		<br />
 		{{ comment.to_comment.content|linebreaksbr }}
-	<blockquote>
+	</blockquote>
 	</div>
 	{% endif %}
 	<div id="comment1" class="panel-footer">{{ comment.content|linebreaksbr }}</div>
@@ -114,6 +116,7 @@ $(document).ready(function(){
 			var ret = JSON.parse(data);
 			if (ret["status"]=="ok"){
 				$("#commentContent").val("");
+				alert(ret["msg"]);
 				window.location.href = "/article/detail/{{ a.id }}?page_no={{ pagination_data.page_cnt }}"
 			}else{
 				alert(ret["msg"]);

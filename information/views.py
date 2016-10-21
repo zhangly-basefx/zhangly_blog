@@ -15,3 +15,9 @@ def readInfo(request,information_id):
     msg_info.save()
     return redirect(msg_info.link)
 
+def setInfo(request):
+    msg_infos = Information.objects.filter(status=-1,owner=request.user)
+    for i in msg_infos:
+        i.status = 0
+        i.save()
+    return redirect("/message/list/")
