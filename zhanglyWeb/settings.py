@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ttpck#z&chg6$fbj@ek)*ib1i!=#-2u%0m&i@ply0zcrk9laql'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','zhangly.com']
 
 
 # Application definition
@@ -118,6 +118,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+#DEBUG = False
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
@@ -126,7 +128,10 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS=(
     os.path.join(BASE_DIR,"static"),
+    os.path.join(BASE_DIR,"DjangoUeditor/static")
 )
+
+STATIC_ROOT = os.path.join(BASE_DIR,"dist_static")
 
 #set email
 EMAIL_USE_SSL = True
@@ -140,6 +145,27 @@ DEFAULT_FROM_EMAIL="793417544@qq.com"
 
 #set login
 LOGIN_REDIRECT_URL = "/"
+
+#ueditor setting
+MEDIA_ROOT = "/usr/share/userres/article/"
+MEDIA_URL = "http://zhangly.com/media/article/"
+
+#mariaDB setting
+DATABASES = {
+    'default':{
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'zhangly_web',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',  # 默认为localhost
+        'PORT': '',  # 默认为3306
+    }
+}
+
+
+
+
+
 
 
 

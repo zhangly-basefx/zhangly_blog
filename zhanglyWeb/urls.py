@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^accounts/',include('django.contrib.auth.urls')),
     url(r'^comment/create/',comment.views.ifstatus),
     url(r'^message/',include('information.urls')),
+    url(r'^ueditor/',include('DjangoUeditor.urls')),
 
 ]
 

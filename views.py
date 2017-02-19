@@ -48,7 +48,8 @@ def create_user(request,):
         
         #send to user email
         activate_link = "http://%s/activate/%s"%(request.get_host(),activate_code)
-        activate_email = '''点击<a href="%s">这里</a>激活'''%activate_link
+        activate_email = '''欢迎注册凌云的个人博客，
+                            点击<a href="%s">这里</a>激活'''%activate_link
         send_mail(subject='[张凌云个人博客]激活邮件',
                            message='点击链接激活:%s'%activate_link,
                            html_message=activate_email,
